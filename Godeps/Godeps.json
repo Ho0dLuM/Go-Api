@@ -2,9 +2,6 @@
 	"ImportPath": "github.com/ho0dlum/leagueapi",
 	"GoVersion": "go1.7",
 	"GodepVersion": "v75",
-	"Packages": [
-		"./..."
-	],
 	"Deps": [
 		{
 			"ImportPath": "github.com/gin-gonic/gin",
