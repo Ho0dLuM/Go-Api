@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"log"
-	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -52,7 +51,7 @@ func CORSMiddleware() gin.HandlerFunc {
 }
 
 func main() {
-	port := os.Getenv("PORT")
+	// port := os.Getenv("PORT")
 	app := gin.Default()
 	app.Use(CORSMiddleware())
 	router := app.Group("api/v1")
@@ -63,15 +62,15 @@ func main() {
 		router.DELETE("/champions/:id", DeleteChampion)
 		// router.PUT("/champions/:id", UpdateChampion)
 	}
-	app.Run(":" + port)
-	// app.Run(":8080")
+	// app.Run(":" + port)
+	app.Run(":8080")
 }
 
 var dbmap = initDb()
 
 func initDb() *gorp.DbMap {
-	url := os.Getenv("DATABASE_URL")
-	db, err := sql.Open("postgres", url)
+	// url := os.Getenv("DATABASE_URL")
+	db, err := sql.Open("postgres", "postgres://Ho0dLuM:password@localhost/league_api?sslmode=disable")
 	checkErr(err, "sql.Open failed")
 	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.PostgresDialect{}}
 
