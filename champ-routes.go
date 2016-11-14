@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"log"
+	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -34,8 +35,26 @@ type Champion struct {
 	Spellsrdescription string `db:"spells_r_description" json:"spellsRdescription"`
 }
 
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	}
+}
+
 func main() {
+	port := os.Getenv("PORT")
 	app := gin.Default()
+	app.Use(CORSMiddleware())
 	router := app.Group("api/v1")
 	{
 		router.GET("/champions", GetChampions)
@@ -44,13 +63,15 @@ func main() {
 		router.DELETE("/champions/:id", DeleteChampion)
 		// router.PUT("/champions/:id", UpdateChampion)
 	}
-	app.Run(":8080")
+	app.Run(":" + port)
+	// app.Run(":8080")
 }
 
 var dbmap = initDb()
 
 func initDb() *gorp.DbMap {
-	db, err := sql.Open("postgres", "postgres://Ho0dLuM:password@localhost/league_api?sslmode=disable")
+	url := os.Getenv("DATABASE_URL")
+	db, err := sql.Open("postgres", url)
 	checkErr(err, "sql.Open failed")
 	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.PostgresDialect{}}
 
