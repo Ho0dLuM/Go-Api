@@ -90,7 +90,7 @@ func GetChampions(c *gin.Context) {
 	if err == nil {
 		c.JSON(200, champions)
 	} else {
-		c.JSON(404, gin.H{"error": "no user(s) into the table"})
+		c.JSON(404, gin.H{"error": "no champion(s)"})
 	}
 }
 
