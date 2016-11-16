@@ -25,3 +25,4 @@ CREATE TABLE champions (
 );
 
 \i /Users/Ho0dLuM/GOspace/src/github.com/ho0dlum/leagueapi/postgres/DML/champions.sql
+-- and test
